@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@http/*":["src/infra/http/*"],
+    }
+  }
+}
