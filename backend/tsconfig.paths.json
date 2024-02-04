@@ -2,7 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@http/*":["src/infra/http/*"],
-    }
+      "@http/*":["src/http/*"],
+      "@lib/*":["src/http/lib/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@modules/*": ["src/modules/*"],
+    }  
   }
 }
