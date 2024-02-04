@@ -6,6 +6,7 @@
       "@lib/*":["src/http/lib/*"],
       "@repositories/*": ["src/repositories/*"],
       "@modules/*": ["src/modules/*"],
+      "@error/*": ["src/error/*"],
     }  
   }
 }

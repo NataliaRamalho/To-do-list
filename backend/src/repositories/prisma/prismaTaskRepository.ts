@@ -1,6 +1,5 @@
 import { prisma } from '@lib/prisma'
 import { TaskRepository } from '@repositories/interfaces/taskRepository'
-
 export class PrismaTaskRepository implements TaskRepository {
   async list() {
     const tasks = await prisma.task.findMany()
@@ -14,5 +13,27 @@ export class PrismaTaskRepository implements TaskRepository {
       },
     })
     return task
+  }
+
+  async findById(id: number) {
+    const task = await prisma.task.findUnique({
+      where: {
+        id,
+      },
+    })
+    return task
+  }
+
+  async edit(id: number, title: string) {
+    const result = await prisma.task.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        updatedAt: new Date(),
+      },
+    })
+    return result
   }
 }

@@ -1,4 +1,7 @@
 import { Request, Response } from 'express'
+
+import { handleError } from '@error/handleError'
+
 import { makeListTasks } from '../factories/makeListTasks'
 
 const ListTaskController = async (req: Request, res: Response) => {
@@ -8,7 +11,7 @@ const ListTaskController = async (req: Request, res: Response) => {
     const result = await factory.execute()
     res.status(200).send(result)
   } catch (err) {
-    console.log(err)
+    handleError(res, err)
   }
 }
 
