@@ -1,8 +1,8 @@
 'use client';
 import { ActionButton } from '@/components/actionButton';
 import { CheckboxComponent } from '@/components/ui/checkbox';
-import { useQuery } from '@tanstack/react-query';
-import { FaPencilAlt, FaPlus, FaTrashAlt } from "react-icons/fa"
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { FaPlus } from "react-icons/fa"
 
 
 type Task = {
@@ -23,6 +23,28 @@ export default function Home() {
       return result
     },
   });
+
+  const deleteTaskMutation = useMutation({
+    mutationFn: async (taskId: number) => {
+      return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/task/${taskId}`, {
+        method: 'DELETE'
+      }).then(res => res.body)
+    },
+    onSuccess:() =>{
+      getTasks.refetch()
+    }
+  })
+
+  const checkedTaskMutation = useMutation({
+    mutationFn: async (taskId: number) => {
+      return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/task/${taskId}`, {
+        method: 'PATCH'
+      })
+    },
+    onSuccess:() =>{
+      getTasks.refetch()
+    }
+  })
 
 
   if(getTasks.isLoading){
@@ -47,6 +69,7 @@ export default function Home() {
             <div className="flex-none">
              <CheckboxComponent 
                checked={task.isChecked}
+               onClick={() => checkedTaskMutation.mutate(task.id)}
               />
             </div>
            <div className="flex-1 self-end">
@@ -54,7 +77,7 @@ export default function Home() {
             </div>
             <div className="flex flex-row gap-2 flex-none">
               <ActionButton variant='edit' />
-              <ActionButton variant='delete' />
+              <ActionButton variant='delete' onClick={() => deleteTaskMutation.mutate(task.id)}/>
             </div>
           </div>
         ))}
