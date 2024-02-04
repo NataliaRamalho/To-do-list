@@ -6,4 +6,13 @@ export class PrismaTaskRepository implements TaskRepository {
     const tasks = await prisma.task.findMany()
     return tasks
   }
+
+  async create(title: string) {
+    const task = await prisma.task.create({
+      data: {
+        title,
+      },
+    })
+    return task
+  }
 }

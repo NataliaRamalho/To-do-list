@@ -6,7 +6,7 @@ const ListTaskController = async (req: Request, res: Response) => {
     const factory = makeListTasks()
 
     const result = await factory.execute()
-    res.send(result).status(200)
+    res.status(200).send(result)
   } catch (err) {
     console.log(err)
   }
