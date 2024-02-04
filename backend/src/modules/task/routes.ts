@@ -6,10 +6,12 @@ import { ListTaskController } from './controllers/list'
 import { CreateTaskController } from './controllers/create'
 import { EditTaskController } from './controllers/edit'
 import { DeleteTaskController } from './controllers/delete'
+import { EditCheckedTaskController } from './controllers/editCheck'
 
 import { CreateTaskSchema } from './schema/create'
 import { EditTaskSchema } from './schema/edit'
 import { DeleteTaskSchema } from './schema/delete'
+import { EditCheckedTaskSchema } from './schema/editCheck'
 
 const taskRoutes = () => {
   const route = Router()
@@ -17,6 +19,11 @@ const taskRoutes = () => {
   route.get('/api/tasks', ListTaskController)
   route.post('/api/task', validate(CreateTaskSchema), CreateTaskController)
   route.put('/api/task/:id', validate(EditTaskSchema), EditTaskController)
+  route.put(
+    '/api/task/check/:id',
+    validate(EditCheckedTaskSchema),
+    EditCheckedTaskController,
+  )
   route.delete(
     '/api/task/:id',
     validate(DeleteTaskSchema),

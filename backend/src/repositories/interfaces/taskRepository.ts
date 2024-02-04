@@ -6,6 +6,7 @@ interface TaskRepository {
   findById(id: number): Promise<Task | null>
   edit(id: number, title: string): Promise<Task>
   delete(id: number): Promise<Task>
+  editCheck(id: number, isChecked: boolean): Promise<Task>
 }
 
 export { TaskRepository }

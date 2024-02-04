@@ -4,15 +4,15 @@ import { NotFoundError } from '@error/notFoundError'
 
 type paramsType = {
   id: number
-  title: string
+  isChecked: boolean
 }
 
-export class EditTaskUseCase {
+export class EditCheckTaskUseCase {
   constructor(private task: TaskRepository) {
     this.task = task
   }
 
-  async execute({ id, title }: paramsType) {
+  async execute({ id, isChecked }: paramsType) {
     const doesTaskExists = await this.task.findById(id)
     if (!doesTaskExists) {
       throw new NotFoundError(
@@ -20,7 +20,7 @@ export class EditTaskUseCase {
       )
     }
 
-    const task = await this.task.edit(id, title)
+    const task = await this.task.editCheck(id, isChecked)
     return task
   }
 }

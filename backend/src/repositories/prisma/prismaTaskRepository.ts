@@ -45,4 +45,16 @@ export class PrismaTaskRepository implements TaskRepository {
     })
     return result
   }
+
+  async editCheck(id: number, isChecked: boolean) {
+    const result = await prisma.task.update({
+      where: {
+        id,
+      },
+      data: {
+        isChecked,
+      },
+    })
+    return result
+  }
 }
