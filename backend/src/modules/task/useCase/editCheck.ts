@@ -4,7 +4,6 @@ import { NotFoundError } from '@error/notFoundError'
 
 type paramsType = {
   id: number
-  isChecked: boolean
 }
 
 export class EditCheckTaskUseCase {
@@ -12,15 +11,15 @@ export class EditCheckTaskUseCase {
     this.task = task
   }
 
-  async execute({ id, isChecked }: paramsType) {
-    const doesTaskExists = await this.task.findById(id)
-    if (!doesTaskExists) {
+  async execute({ id }: paramsType) {
+    const taskFound = await this.task.findById(id)
+    if (!taskFound) {
       throw new NotFoundError(
         'Tarefa não encontrada. Por favor valide o id informado',
       )
     }
 
-    const task = await this.task.editCheck(id, isChecked)
+    const task = await this.task.editCheck(id, !taskFound.isChecked)
     return task
   }
 }

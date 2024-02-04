@@ -19,8 +19,8 @@ const taskRoutes = () => {
   route.get('/api/tasks', ListTaskController)
   route.post('/api/task', validate(CreateTaskSchema), CreateTaskController)
   route.put('/api/task/:id', validate(EditTaskSchema), EditTaskController)
-  route.put(
-    '/api/task/check/:id',
+  route.patch(
+    '/api/task/:id',
     validate(EditCheckedTaskSchema),
     EditCheckedTaskController,
   )

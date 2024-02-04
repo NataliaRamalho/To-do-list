@@ -9,7 +9,6 @@ const EditCheckedTaskController = async (req: Request, res: Response) => {
     const factory = makeEditCheckTask()
     const task = await factory.execute({
       id: Number(req.params.id),
-      isChecked: req.body.isChecked,
     })
     res.status(200).send(task)
   } catch (err) {
