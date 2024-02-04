@@ -53,12 +53,8 @@ export default function Home() {
               <p>{task.title}</p>
             </div>
             <div className="flex flex-row gap-2 flex-none">
-              <button className='flex bg-white rounded-md items-center justify-center shadow-sm min-h-[30px] min-w-[30px] hover:bg-[#EEEEEE]'>
-                <FaPencilAlt color="#005A9C"/>
-              </button>
-              <button className='flex bg-white rounded-md items-center justify-center shadow-sm min-h-[30px] min-w-[30px] hover:bg-[#EEEEEE]'>
-               <FaTrashAlt color="#BB0000"/>
-              </button>
+              <ActionButton variant='edit' />
+              <ActionButton variant='delete' />
             </div>
           </div>
         ))}
