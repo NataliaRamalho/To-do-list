@@ -155,8 +155,8 @@ export default function Home() {
                 <div
                   className={
                     task.isChecked
-                      ? 'flex-1 self-end text-gray-300 line-through'
-                      : 'flex-1 self-end'
+                      ? 'flex-1 self-end overflow-auto text-gray-300 line-through'
+                      : 'flex-1 self-end overflow-auto'
                   }
                 >
                   <p>{task.title}</p>
@@ -179,7 +179,7 @@ export default function Home() {
               <div
                 className="flex flex-row items-center gap-x-2 rounded-md bg-slate-50 p-2"
               >
-                <div className='flex flex-1'>
+                <div className='flex flex-1 '>
                   <input
                     placeholder="Digite a tarefa"
                     type="text"
