@@ -38,8 +38,7 @@ Caso tenha o [git](https://git-scm.com/downloads) instalado, digite o comando ab
 Se não, faça o download do repositório e descompacte o arquivo.
 
 `````
-git clone https://github.com/NataliaRamalho/To-do-list.git
-
+git clone https://github.com/NataliaRamalho/to-do-list.git
 `````
 
 ## Executando o backend
