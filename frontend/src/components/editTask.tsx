@@ -12,7 +12,7 @@ type TaskProps = {
 }
 
 export function EditTask({ taskData, onSaveTask }: TaskProps) {
-  const [title, setTitle] = React.useState<string>()
+  const [title, setTitle] = React.useState<string>(taskData.title)
   return (
     <div className="flex flex-row items-center gap-x-2 rounded-md bg-slate-50 p-2">
       <div className="flex flex-1 ">
@@ -21,6 +21,7 @@ export function EditTask({ taskData, onSaveTask }: TaskProps) {
           onChange={(event) =>
             setTitle(event.target.value)
           }
+          value={title}
         />
       </div>
       <div className="flex flex-none flex-row">

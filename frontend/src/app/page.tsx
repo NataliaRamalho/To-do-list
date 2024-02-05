@@ -114,7 +114,10 @@ export default function Home() {
         <div className="flex p-5">
           <button
             className="flex items-center gap-2 p-2 hover:opacity-35"
-            onClick={() => setIsCreate(true)}
+            onClick={() => {
+              setTaskEditId(null)
+              setIsCreate(true)
+            }}
           >
             <FaPlus color="#005A9C" />
             <p>Adicionar tarefa</p>
@@ -147,7 +150,10 @@ export default function Home() {
                   key={task.id}
                   onCheckedTask={(id) => checkedTaskMutation.mutate(id)}
                   onDeleteTask={(id) => deleteTaskMutation.mutate(id)}
-                  onEditTask={(id) => setTaskEditId(id)}
+                  onEditTask={(id) => {
+                    setTaskEditId(id) 
+                    setIsCreate(false)
+                  }}
                 />
               ) : (
                 <EditTask taskData={task} onSaveTask={handleEditTask} />
