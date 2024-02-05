@@ -5,25 +5,26 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { FaPlus } from 'react-icons/fa'
 
-import { ActionButton } from '@/components/actionButton'
-import { CheckboxComponent } from '@/components/ui/checkbox'
+import { TaskType } from '@/types/task'
+import { InputTaskTitle } from '@/components/inputTaskTitle'
+import { Task } from '@/components/task'
+import { EditTask } from '@/components/editTask'
+import { TaskListLoading } from '@/components/taskListLoading'
 
-import { Task } from '@/types/task'
-
-type TaskEditType = {
-  id: number, 
+export type TaskEditType = {
+  id: number
   title?: string
 }
 
 export default function Home() {
   const [isCreate, setIsCreate] = React.useState<boolean>(false)
   const [newText, setNewTask] = React.useState<string>()
-  const [taskEditData, setTaskEditData] = React.useState<TaskEditType | null>(null)
+  const [taskEditId, setTaskEditId] = React.useState<number | null>(null)
 
-  const getTasks = useQuery<Task[]>({
+  const getTasks = useQuery<TaskType[]>({
     queryKey: ['task-list'],
     queryFn: async () => {
-      const result: Task[] = await fetch(
+      const result: TaskType[] = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/tasks`,
       ).then((res) => res.json())
       return result
@@ -67,20 +68,23 @@ export default function Home() {
       setIsCreate(false)
     },
   })
-  
+
   const editTaskMutation = useMutation({
     mutationFn: async (taskData: TaskEditType) => {
-      return await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/task/${taskData.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      return await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/task/${taskData.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title: taskData.title }),
         },
-        body: JSON.stringify({ title: taskData.title }),
-      })
+      )
     },
     onSuccess: () => {
       getTasks.refetch()
-      setTaskEditData(null)
+      setTaskEditId(null)
     },
   })
 
@@ -93,20 +97,15 @@ export default function Home() {
     }
   }
 
-  const handleEditTask = (event: React.MouseEvent) => {
-    event.preventDefault()
-    if (taskEditData && taskEditData.title) {
-      return editTaskMutation.mutate(taskEditData)
+  const handleEditTask = (taskId: number, title?: string) => {
+    if (title) {
+      return editTaskMutation.mutate({ id: taskId, title })
     } else {
       alert('O texto não pode ser vazio')
     }
   }
 
-  if (getTasks.isLoading) {
-    return <div> Carregando ...</div>
-  }
-
-  const itemIsEdit = (id: number) => !taskEditData || taskEditData.id !== id
+  const itemIsEdit = (id: number) => !taskEditId || taskEditId !== id
 
   return (
     <div className="flex h-full max-h-screen flex-col items-center">
@@ -124,11 +123,8 @@ export default function Home() {
       )}
       {isCreate && (
         <div className="flex w-2/3 gap-4 py-5 pl-2">
-          <input
+          <InputTaskTitle
             placeholder="Digite a tarefa"
-            type="text"
-            className="w-full border p-1 focus:outline-none"
-            maxLength={60}
             onChange={(event) => setNewTask(event.target.value)}
           />
           <button
@@ -139,70 +135,27 @@ export default function Home() {
           </button>
         </div>
       )}
-      <div className="flex h-2/3 w-2/3 flex-col gap-3 overflow-y-scroll p-2">
-        {getTasks.data?.map((task) => (
-          <div key={task.id}>
-            {itemIsEdit(task.id) ? (
-              <div
-                className="flex flex-row items-center gap-x-2 rounded-md bg-slate-50 p-2"
-              >
-                <div className="flex-none">
-                  <CheckboxComponent
-                    checked={task.isChecked}
-                    onClick={() => checkedTaskMutation.mutate(task.id)}
-                  />
-                </div>
-                <div
-                  className={
-                    task.isChecked
-                      ? 'flex-1 self-end overflow-auto text-gray-300 line-through'
-                      : 'flex-1 self-end overflow-auto'
-                  }
-                >
-                  <p>{task.title}</p>
-                </div>
-                <div className="flex flex-none flex-row gap-2">
-                  <ActionButton
-                    variant="edit"
-                    disabled={task.isChecked}
-                    onClick={() => setTaskEditData({ id: task.id })}
-                  />
-
-                  <ActionButton
-                    variant="delete"
-                    onClick={() => deleteTaskMutation.mutate(task.id)}
-                    disabled={task.isChecked}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div
-                className="flex flex-row items-center gap-x-2 rounded-md bg-slate-50 p-2"
-              >
-                <div className='flex flex-1 '>
-                  <input
-                    placeholder="Digite a tarefa"
-                    type="text"
-                    className="w-full border p-1 focus:outline-none"
-                    maxLength={60}
-                    onChange={(event) => setTaskEditData({
-                      id: task.id,
-                      title: event.target.value
-                    })}
-                  />
-                </div>
-                <div className="flex flex-none flex-row">
-                  <ActionButton
-                    variant="save"
-                    disabled={task.isChecked}
-                    onClick={handleEditTask}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      {getTasks.isLoading ? (
+        <TaskListLoading />
+      ) : (
+        <div className="flex h-2/3 w-2/3 flex-col gap-3 overflow-y-scroll p-2">
+          {getTasks.data?.map((task) => (
+            <div key={task.id}>
+              {itemIsEdit(task.id) ? (
+                <Task
+                  taskData={task}
+                  key={task.id}
+                  onCheckedTask={(id) => checkedTaskMutation.mutate(id)}
+                  onDeleteTask={(id) => deleteTaskMutation.mutate(id)}
+                  onEditTask={(id) => setTaskEditId(id)}
+                />
+              ) : (
+                <EditTask taskData={task} onSaveTask={handleEditTask} />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-type Task = {
+type TaskType = {
   id: number,
   title: string
   isChecked: boolean,
@@ -6,4 +6,4 @@ type Task = {
   updatedAt: string
 }
 
-export { Task }
+export { TaskType }

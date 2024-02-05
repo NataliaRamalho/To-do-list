@@ -8,7 +8,7 @@ type CheckboxProps = React.ComponentProps<typeof Checkbox.Root>
 export function CheckboxComponent(props: CheckboxProps){
   return (
       <Checkbox.Root 
-       className='flex border bg-white rounded-md items-center justify-center shadow-sm hover:bg-[#EEEEEE] min-w-[25px] min-h-[25px]'
+       className='flex border bg-white rounded-md items-center justify-center shadow-sm hover:bg-slate-200 min-w-[25px] min-h-[25px]'
        {...props}
       >
       <Checkbox.CheckboxIndicator>
